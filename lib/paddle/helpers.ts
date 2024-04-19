@@ -19,10 +19,7 @@ export const initiateCheckout = async ({ productId, userId }: { productId: strin
 export const handleSuccessfulPayment = async (paymentData: any) => {
   try {
     console.log('Successful payment:', paymentData);
-
-    // Update the user's subscription status or perform any other required actions
-    // Example: Update the user's subscription status in the database
-    await updateUserSubscriptionStatus(paymentData.user_id, paymentData.subscription_id);
+    // You can add additional logic here if needed, such as sending notifications or updating user data in Paddle
   } catch (error) {
     console.error('Error handling successful payment:', error);
     throw error;
@@ -31,7 +28,7 @@ export const handleSuccessfulPayment = async (paymentData: any) => {
 
 export const handleWebhookEvent = async (webhookPayload: PaddleWebhookPayload) => {
   try {
-    const isValidSignature = verifyWebhookSignature(webhookPayload);
+    const isValidSignature = verifyWebhookSignature(webhookPayload, PADDLE_PUBLIC_KEY, PADDLE_VENDOR_AUTH_CODE);
 
     if (!isValidSignature) {
       throw new Error('Invalid webhook signature');
@@ -44,6 +41,15 @@ export const handleWebhookEvent = async (webhookPayload: PaddleWebhookPayload) =
       case 'subscription_updated':
         await handleSubscriptionUpdate(webhookPayload.data);
         break;
+      case 'subscription_created':
+        await handleSubscriptionCreated(webhookPayload.data);
+        break;
+      case 'subscription_cancelled':
+        await handleSubscriptionCancelled(webhookPayload.data);
+        break;
+      case 'payment_failed':
+        await handlePaymentFailed(webhookPayload.data);
+        break;
       default:
         console.log('Unhandled webhook event:', webhookPayload.alert_name);
     }
@@ -53,29 +59,38 @@ export const handleWebhookEvent = async (webhookPayload: PaddleWebhookPayload) =
   }
 };
 
-const verifyWebhookSignature = (webhookPayload: PaddleWebhookPayload): boolean => {
+export const verifyWebhookSignature = (webhookPayload: PaddleWebhookPayload, publicKey: string, vendorAuthCode: string): boolean => {
   const { p_signature, ...payload } = webhookPayload;
   const payloadString = JSON.stringify(payload);
-  const expectedSignature = generateSignature(payloadString);
+  const expectedSignature = generateSignature(payloadString, publicKey, vendorAuthCode);
 
   return p_signature === expectedSignature;
 };
 
-const generateSignature = (payloadString: string): string => {
+const generateSignature = (payloadString: string, publicKey: string, vendorAuthCode: string): string => {
   const crypto = require('crypto');
-  const hmac = crypto.createHmac('sha1', PADDLE_PUBLIC_KEY);
+  const hmac = crypto.createHmac('sha1', publicKey);
   hmac.update(payloadString);
-  hmac.update(PADDLE_VENDOR_AUTH_CODE);
+  hmac.update(vendorAuthCode);
   return hmac.digest('hex');
 };
 
 const handleSubscriptionUpdate = async (subscriptionData: PaddleSubscriptionData) => {
   console.log('Subscription updated:', subscriptionData);
-  // Implement the logic to handle subscription updates
+  // You can add additional logic here if needed, such as updating subscription data in Paddle
 };
 
-// Helper function to update the user's subscription status in the database
-const updateUserSubscriptionStatus = async (userId: string, subscriptionId: string) => {
-  // Implement the logic to update the user's subscription status in the database
-  console.log(`Updated subscription status for user ${userId} with subscription ${subscriptionId}`);
+const handleSubscriptionCreated = async (subscriptionData: PaddleSubscriptionData) => {
+  console.log('Subscription created:', subscriptionData);
+  // You can add additional logic here if needed, such as creating a new subscription in Paddle
+};
+
+const handleSubscriptionCancelled = async (subscriptionData: PaddleSubscriptionData) => {
+  console.log('Subscription cancelled:', subscriptionData);
+  // You can add additional logic here if needed, such as canceling the subscription in Paddle
+};
+
+const handlePaymentFailed = async (paymentData: any) => {
+  console.log('Payment failed:', paymentData);
+  // You can add additional logic here if needed, such as handling failed payments
 };

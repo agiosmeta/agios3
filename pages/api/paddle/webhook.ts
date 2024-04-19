@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { handleWebhookEvent } from '@/lib/paddle/helpers';
+import { handleWebhookEvent, verifyWebhookSignature } from '@/lib/paddle/helpers';
+import { PADDLE_PUBLIC_KEY, PADDLE_VENDOR_AUTH_CODE } from '@/lib/paddle/config';
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,6 +9,13 @@ export default async function handler(
   if (req.method === 'POST') {
     try {
       const webhookPayload = req.body;
+
+      // Verify the webhook signature
+      const isValidSignature = verifyWebhookSignature(webhookPayload, PADDLE_PUBLIC_KEY, PADDLE_VENDOR_AUTH_CODE);
+
+      if (!isValidSignature) {
+        return res.status(401).json({ error: 'Invalid webhook signature' });
+      }
 
       // Process the webhook payload
       await handleWebhookEvent(webhookPayload);
