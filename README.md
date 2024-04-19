@@ -1,3 +1,23 @@
+agios3/
+├── components/
+│   └── paddle/
+│       ├── PaddleCheckout.tsx  # Component for rendering Paddle checkout
+│       └── PaddleSuccess.tsx   # Component for handling successful payments
+├── lib/
+│   └── paddle/
+│       ├── config.ts           # Paddle configuration (API keys, etc.)
+│       └── helpers.ts          # Helper functions for Paddle integration
+├── pages/
+│   ├── api/
+│   │   └── paddle/
+│   │       └── checkout.ts     # API route for handling Paddle checkout
+│   └── paddle/
+│       ├── checkout.tsx        # Page for initiating Paddle checkout
+│       └── success.tsx         # Page for handling successful payments
+├── types/
+│   └── paddle.ts               # TypeScript types for Paddle integration
+
+
 # Next.js Subscription Payments Starter
 
 The all-in-one starter kit for high-performance SaaS applications.
