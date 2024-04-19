@@ -1,36 +1,21 @@
-import Pricing from '@/components/ui/Pricing/Pricing';
+import ProductsPage from '@/pages/products';
 import { createClient } from '@/utils/supabase/server';
+import { User } from '@supabase/supabase-js';
 
-export default async function PricingPage() {
+interface ProductsPageProps {
+  user: User | null;
+}
+
+export default async function Home() {
   const supabase = createClient();
 
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
-
-  const { data: subscription, error } = await supabase
-    .from('subscriptions')
-    .select('*, prices(*, products(*))')
-    .in('status', ['trialing', 'active'])
-    .maybeSingle();
+  const { data: { user }, error } = await supabase.auth.getUser();
 
   if (error) {
-    console.log(error);
+    console.error('Error fetching user:', error);
+    // You can handle the error case here, e.g., redirect to a fallback page
+    return <div>Error fetching user data</div>;
   }
 
-  const { data: products } = await supabase
-    .from('products')
-    .select('*, prices(*)')
-    .eq('active', true)
-    .eq('prices.active', true)
-    .order('metadata->index')
-    .order('unit_amount', { referencedTable: 'prices' });
-
-  return (
-    <Pricing
-      user={user}
-      products={products ?? []}
-      subscription={subscription}
-    />
-  );
+  return <ProductsPage user={user ?? null} />;
 }

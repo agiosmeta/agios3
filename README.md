@@ -1,11 +1,11 @@
 agios3/
 ├── components/
 │   └── paddle/
-│       ├── PaddleCheckout.tsx  # Component for rendering Paddle checkout
-│       └── PaddleSuccess.tsx   # Component for handling successful payments
+│       ├── PaddleCheckout.tsx  # React component for rendering Paddle checkout
+│       └── PaddleSuccess.tsx   # React component for handling successful Paddle payments
 ├── lib/
 │   └── paddle/
-│       ├── config.ts           # Paddle configuration (API keys, etc.)
+│       ├── config.ts           # Configuration settings for Paddle integration
 │       └── helpers.ts          # Helper functions for Paddle integration
 ├── pages/
 │   ├── api/
@@ -13,9 +13,49 @@ agios3/
 │   │       └── checkout.ts     # API route for handling Paddle checkout
 │   └── paddle/
 │       ├── checkout.tsx        # Page for initiating Paddle checkout
-│       └── success.tsx         # Page for handling successful payments
+│       └── success.tsx         # Page for handling successful Paddle payments
 ├── types/
 │   └── paddle.ts               # TypeScript types for Paddle integration
+├── .env.example                # Example environment variable file
+├── .env.local.example          # Example local environment variable file
+├── .prettierrc.json            # Configuration file for Prettier code formatter
+├── components.json             # Configuration file for Shadcn UI components
+├── LICENSE                     # License file (MIT License)
+├── middleware.ts               # Next.js middleware file
+├── next-env.d.ts               # Next.js environment type definitions
+├── package.json                # Project dependencies and scripts
+├── pnpm-lock.yaml              # Lockfile for pnpm package manager
+├── postcss.config.js           # Configuration file for PostCSS
+├── README.md                   # Project documentation and setup instructions
+├── schema.sql                  # SQL schema file for Supabase database
+├── styles/
+│   └── main.css                # Main CSS file for styling
+├── supabase/
+│   └── config.toml             # Configuration file for local Supabase instance
+├── tailwind.config.js          # Configuration file for Tailwind CSS
+├── tsconfig.json               # TypeScript configuration file
+├── types_db.ts                 # TypeScript types generated from Supabase database schema
+├── utils/
+│   ├── auth-helpers/
+│   │   └── settings.ts         # Helper functions for authentication settings
+│   ├── helpers.ts              # General helper functions
+│   ├── stripe/
+│   │   └── config.ts           # Configuration settings for Stripe integration
+│   └── ui/
+│       └── Toasts/
+│           └── use-toast.ts    # React hook for managing toast notifications
+
+The repository contains the following main directories:
+
+components/: React components for the application
+lib/: Utility libraries and helper functions
+pages/: Next.js pages and API routes
+types/: TypeScript type definitions
+utils/: Utility functions and configurations
+styles/: CSS styles for the application
+supabase/: Configuration files for the local Supabase instance
+
+Additionally, there are configuration files for various tools and libraries used in the project, such as Prettier, PostCSS, Tailwind CSS, and TypeScript.
 
 
 # Next.js Subscription Payments Starter

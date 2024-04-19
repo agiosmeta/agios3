@@ -1,27 +1,42 @@
 import axios from 'axios';
 import { PADDLE_PUBLIC_KEY, PADDLE_VENDOR_AUTH_CODE } from './config';
-import { PaddleWebhookPayload } from '@/types/paddle';
+import { PaddleWebhookPayload, PaddleSubscriptionData } from '@/types/paddle';
 
+export const initiateCheckout = async ({ productId, userId }: { productId: string; userId: string }) => {
+  try {
+    const response = await axios.post('https://checkout.paddle.com/api/2.0/checkout/open', {
+      product_id: productId,
+      user_id: userId,
+    });
 
-
-export const initiateCheckout = async ({ productId, userId }) => {
-  // Existing initiateCheckout function implementation
+    return response.data.checkout_url;
+  } catch (error) {
+    console.error('Error initiating Paddle checkout:', error);
+    throw error;
+  }
 };
 
-export const handleSuccessfulPayment = async (paymentData) => {
-  // Existing handleSuccessfulPayment function implementation
+export const handleSuccessfulPayment = async (paymentData: any) => {
+  try {
+    console.log('Successful payment:', paymentData);
+
+    // Update the user's subscription status or perform any other required actions
+    // Example: Update the user's subscription status in the database
+    await updateUserSubscriptionStatus(paymentData.user_id, paymentData.subscription_id);
+  } catch (error) {
+    console.error('Error handling successful payment:', error);
+    throw error;
+  }
 };
 
 export const handleWebhookEvent = async (webhookPayload: PaddleWebhookPayload) => {
   try {
-    // Verify the webhook payload signature
     const isValidSignature = verifyWebhookSignature(webhookPayload);
 
     if (!isValidSignature) {
       throw new Error('Invalid webhook signature');
     }
 
-    // Process the webhook payload based on the event type
     switch (webhookPayload.alert_name) {
       case 'payment_succeeded':
         await handleSuccessfulPayment(webhookPayload.data);
@@ -29,7 +44,6 @@ export const handleWebhookEvent = async (webhookPayload: PaddleWebhookPayload) =
       case 'subscription_updated':
         await handleSubscriptionUpdate(webhookPayload.data);
         break;
-      // Handle other webhook event types as needed
       default:
         console.log('Unhandled webhook event:', webhookPayload.alert_name);
     }
@@ -39,7 +53,6 @@ export const handleWebhookEvent = async (webhookPayload: PaddleWebhookPayload) =
   }
 };
 
-// Helper function to verify the webhook payload signature
 const verifyWebhookSignature = (webhookPayload: PaddleWebhookPayload): boolean => {
   const { p_signature, ...payload } = webhookPayload;
   const payloadString = JSON.stringify(payload);
@@ -48,7 +61,6 @@ const verifyWebhookSignature = (webhookPayload: PaddleWebhookPayload): boolean =
   return p_signature === expectedSignature;
 };
 
-// Helper function to generate the expected signature
 const generateSignature = (payloadString: string): string => {
   const crypto = require('crypto');
   const hmac = crypto.createHmac('sha1', PADDLE_PUBLIC_KEY);
@@ -57,8 +69,13 @@ const generateSignature = (payloadString: string): string => {
   return hmac.digest('hex');
 };
 
-// Helper function to handle subscription updates
-const handleSubscriptionUpdate = async (subscriptionData) => {
-  // Implement the logic to handle subscription updates
+const handleSubscriptionUpdate = async (subscriptionData: PaddleSubscriptionData) => {
   console.log('Subscription updated:', subscriptionData);
+  // Implement the logic to handle subscription updates
+};
+
+// Helper function to update the user's subscription status in the database
+const updateUserSubscriptionStatus = async (userId: string, subscriptionId: string) => {
+  // Implement the logic to update the user's subscription status in the database
+  console.log(`Updated subscription status for user ${userId} with subscription ${subscriptionId}`);
 };
