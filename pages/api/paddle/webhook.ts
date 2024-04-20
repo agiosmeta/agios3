@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { handleWebhookEvent, verifyWebhookSignature } from '@/lib/paddle/helpers';
-import { PADDLE_PUBLIC_KEY, PADDLE_VENDOR_AUTH_CODE } from '@/lib/paddle/config';
+import { handleWebhookEvent, verifyWebhookSignature } from '@/utils/paddle/helpers';
+import { PADDLE_PUBLIC_KEY, PADDLE_VENDOR_AUTH_CODE } from '@/utils/paddle/config';
 
 export default async function handler(
   req: NextApiRequest,

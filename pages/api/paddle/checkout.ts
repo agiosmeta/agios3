@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { initiateCheckout } from '@/lib/paddle/helpers';
+import { initiateCheckout } from '@/utils/paddle/helpers';
 
 export default async function handler(
   req: NextApiRequest,

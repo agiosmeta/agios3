@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { handleSuccessfulPayment } from '@/lib/paddle/helpers';
+import { handleSuccessfulPayment } from '@/utils/paddle/helpers';
 
 const PaddleSuccess: React.FC = () => {
   const router = useRouter();
