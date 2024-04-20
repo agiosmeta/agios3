@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PADDLE_PUBLIC_KEY, PADDLE_VENDOR_AUTH_CODE } from './paddle/config';
+import { PADDLE_PUBLIC_KEY, PADDLE_VENDOR_AUTH_CODE } from './config';
 import { PaddleWebhookPayload, PaddleSubscriptionData } from '@/types/paddle';
 
 export const initiateCheckout = async ({ productId, userId }: { productId: string; userId: string }) => {
