@@ -12,3 +12,5 @@ export const PADDLE_PUBLIC_KEY = process.env.PADDLE_PUBLIC_KEY || '';
 
 // Paddle Vendor ID
 export const PADDLE_VENDOR_ID = process.env.PADDLE_VENDOR_ID || '';
+
+//check key
