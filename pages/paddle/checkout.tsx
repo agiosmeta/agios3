@@ -1,5 +1,5 @@
 import React from 'react';
-import PaddleCheckout from '/workspaces/agios3/components/paddle/PaddleCheckout';
+import PaddleCheckout from '@/components/paddle/PaddleCheckout';
 
 const CheckoutPage: React.FC = () => {
   // Implement any additional logic or state management required for the checkout process
